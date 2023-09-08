@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         WebSettings setting = webView.getSettings();//웹뷰 세팅용
 
         setting.setAllowFileAccess(true);//웹에서 파일 접근 여부
-        setting.setAppCacheEnabled(true);//캐쉬 사용여부
+        //setting.setAppCacheEnabled(true);//캐쉬 사용여부
         setting.setGeolocationEnabled(true);//위치 정보 사용여부
         setting.setDatabaseEnabled(true);//HTML5에서 db 사용여부
         setting.setDomStorageEnabled(true);//HTML5에서 DOM 사용여부
@@ -293,62 +293,18 @@ public class MainActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
                 Log.d("url",url);
-
-                if (url.startsWith("tel")) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse(url));
-
-                    try {
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-
-
-                        }
-                        startActivity(intent);
-                        return true;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-
-                }else if(url.startsWith("https://open")){
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY| Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                    startActivity(intent);
-                    return true;
-                }else if(url.startsWith("http://pf.kakao.com/")){
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY| Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                    startActivity(intent);
-                    return true;
-                }else if(url.startsWith("market://")){
-                    try {
-
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                        startActivity(intent);
-                        return true;
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }else if (url.startsWith("intent:")) {
+                if (url.equals(getString(R.string.url)) || url.equals(getString(R.string.domain))) {
+                    isIndex=true;
+                } else {
+                    isIndex=false;
+                }
+                if (url.startsWith("intent:")) {
 
                     try {
                         Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
                         Intent existPackage = getPackageManager().getLaunchIntentForPackage(intent.getPackage());
                         if (existPackage != null) {
-                            getBaseContext().startActivity(intent);
+                            startActivity(intent);
                         } else {
                             Intent marketIntent = new Intent(Intent.ACTION_VIEW);
                             marketIntent.setData(Uri.parse("market://details?id=" + intent.getPackage()));
@@ -359,17 +315,42 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("error1",e.toString());
                         e.printStackTrace();
                     }
-                }
-                /*
-                if(LocationPosition.lng!=0.0){
-                    LocationPosition.act=MainActivity.this;
-                    LocationPosition.setPosition(LocationPosition.act);
-                    if(0<url.indexOf("?")) {
-                        webView.loadUrl(url + "&currentLat=" + LocationPosition.lat + "&currentLng=" + LocationPosition.lng);
-                    }else{
-                        webView.loadUrl(url + "?currentLat=" + LocationPosition.lat + "&currentLng=" + LocationPosition.lng);
+                }/*else if(url.startsWith("market://")){
+                    try {
+
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=kr.foryou.ssum"));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                        startActivity(intent);
+                        return true;
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }else if(url.startsWith("http://pf.kakao.com/")){
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    startActivity(intent);
+                    return true;
+                }else if (url.startsWith("intent:")) {
+
+                    try {
+                        Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                        Intent existPackage = getPackageManager().getLaunchIntentForPackage(intent.getPackage());
+                        if (existPackage != null) {
+                            startActivity(intent);
+                        } else {
+                            Intent marketIntent = new Intent(Intent.ACTION_VIEW);
+                            marketIntent.setData(Uri.parse("market://details?id=" + intent.getPackage()));
+                            startActivity(marketIntent);
+                        }
+                        return true;
+                    } catch (Exception e) {
+                        Log.d("error1",e.toString());
+                        e.printStackTrace();
                     }
                 }*/
+
 
                 return false;
             }

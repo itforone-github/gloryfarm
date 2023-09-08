@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">글로리팜</string>
-    <string name="url">http://gloryfarm.itforone.co.kr</string>
+    <string name="app_name">싱싱농산</string>
+    <string name="url">http://gloryfarm.itforone.co.kr/shop/list.php?ca_id=60</string>
     <string name="domain">http://gloryfarm.itforone.co.kr</string>
 </resources>

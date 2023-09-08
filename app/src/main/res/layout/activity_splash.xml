@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff">
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:scaleType="fitXY"
+        android:layout_centerInParent="true"
+        android:background="#009975"
+        android:scaleType="center"
         android:src="@drawable/splash" />
 </RelativeLayout>
